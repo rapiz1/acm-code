@@ -10,6 +10,8 @@
  */
 #include <bits/stdc++.h>
 #define xxx(x) cerr<<(#x)<<": "<<x<<endl;
+#define lch (o<<1)
+#define rch ((o<<1)|1)
 typedef long long ll;
 using namespace std;
 namespace IStream{
@@ -45,7 +47,7 @@ namespace IO{
 	}
 }
 using IO::gi;
-const int N = 1e5 + 10;
+const int N = 1e5 + 10, SEG=N<<2;
 const int ADD = 10000000;
 int n, m;
 ll lastAns, a[N];
@@ -53,7 +55,6 @@ void solve() {
   lastAns = 0;
   n = gi();
   m = gi();
-  multiset<ll> st;
   for (int i = 1; i <= n; i++) {
     a[i] = gi();
     st.insert(a[i]);
@@ -62,9 +63,6 @@ void solve() {
     int op = gi();
     if (op == 1) {
       int t1 = gi()^lastAns;
-      st.erase(st.find(a[t1]));
-      a[t1] += ADD;
-      st.insert(a[t1]);
     }
     else {
       int t2 = gi()^lastAns, t3 = gi()^lastAns;
