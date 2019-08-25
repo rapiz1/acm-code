@@ -70,14 +70,20 @@ int query(int o, int l, int r, int q, int k) {
     return mx[o] > q ? l : 0;
   }
   int mid = (l+r)>>1;
-  int ret = 0;
-  if (k<= mid && mx[lch] > q) {
-    ret = query(lch, l, mid, q, k);
+  if (k <= l) {
+    if (mx[lch] > q) return query(lch, l, mid, q, k);
+    else return query(rch, mid+1, r, q, k);
   }
-  if (!ret && k <= r && mx[rch] > q) {
-    ret = query(rch, mid+1, r, q, k);
+  else {
+    int ret = 0;
+    if (k<= mid) {
+      ret = query(lch, l, mid, q, k);
+    }
+    if (!ret && k <= r) {
+      ret = query(rch, mid+1, r, q, k);
+    }
+    return ret;
   }
-  return ret;
 }
 void solve() {
   memset(mx+1, 0, sizeof(int)*(n<<2));
