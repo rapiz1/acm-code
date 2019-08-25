@@ -47,6 +47,5 @@ int main() {
     while (solve()) ;
     cout << endl;
   }
-  cout << endl;
 }
 

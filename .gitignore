@@ -2,4 +2,9 @@ a.out
 input
 output
 answer
+brute
+std
+*.in
+*.ans
+*.out
 *.py
