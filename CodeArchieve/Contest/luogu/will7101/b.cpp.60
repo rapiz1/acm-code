@@ -1,0 +1,39 @@
+#include <cstdio>
+#include <iostream>
+#include <cmath>
+#include <cassert>
+using namespace std;
+typedef long long ll;
+const int M = 10007, SQN = 3e5 + 10;
+long long a, b, p[SQN], f[SQN], c[SQN], baoli[SQN];
+inline long long calc(int n) {
+	long long ans = 0;
+	for (int i = 1; i < SQN; i++)
+			for (int j = i + 1; 1ll*i*j <= n; j++)
+				ans += (p[i] + 1ll*j*j*c[i] + 2ll*j*f[i]) + (p[j] + i*i*1ll*c[j] + 2ll*i*f[j]), ans %= M;
+	for (int i = 1; 1ll*i*i <= n; i++) ans += (p[i] + 1ll*i*i*c[i] + 2ll*i*f[i]), ans %= M;
+	return ans;
+}
+int main() {
+//	freopen("input", "r", stdin);
+	cin >> a >> b;
+	for (int i = 1; i < SQN; i++) {
+		for (int j = i + 1; 1ll*i*j < SQN; j++)
+			p[i*j] = (p[i*j] + (i+j)*1ll*(i+j))%M;
+		p[i] = 2*p[i]%M;
+	}
+	for (int i = 1; i < SQN; i++) if (pow((ll)sqrt(i), 2) == i) p[i] = (p[i] + (ll)pow(2*ll(sqrt(i)), 2))%M;
+	for (int i = 1; i < SQN; i++) {
+		for (int j = i + 1; 1ll*i*j < SQN; j++)
+			f[i*j] = (f[i*j] + i + j)%M;
+		f[i] = 2*f[i]%M;
+	}
+	for (int i = 1; i < SQN; i++) if (pow((ll)sqrt(i), 2) == i) f[i] = (f[i] + 2*ll(sqrt(i)))%M;
+	for (int i = 1; i < SQN; i++) {
+		for (int j = i + 1; 1ll*i*j < SQN; j++)
+			c[i*j] = (c[i*j] + 1)%M;
+		c[i] = 2*c[i]%M;
+	}
+	for (int i = 1; i < SQN; i++) if (pow((ll)sqrt(i), 2) == i) c[i] = (c[i] + 1)%M;
+	cout << (calc(b) - calc(a - 1) + M)*4%M;
+}

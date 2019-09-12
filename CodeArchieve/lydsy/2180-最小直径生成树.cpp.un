@@ -1,0 +1,28 @@
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <queue>
+using namespace std;
+const int N = 1e3 + 10, INF = 0x3f3f3f3f;
+int n, m, d[N][N], e[N][N];
+int main() {
+	scanf("%d%d", &n, &m);
+	memset(d, 0x3f, sizeof(d));
+	int u, v, w, ans = INF;
+	while (m--) {
+		scanf("%d%d%d", &u, &v, &w);
+		d[v][u] = d[u][v] = w;
+	}
+	for (int i = 1;  i <= n; i++) d[i][i] = 0;
+	memcpy(e, d, sizeof(d));
+	for (int k = 1; k <= n; k++)
+		for (int i = 1; i <= n; i++)
+			for (int j = 1; j <= n; j++)
+				d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
+	for (int i = 1; i <= n; i++) for (int j = i; j <= n; j++) if (e[i][j] != INF) {
+		int x = 0;
+		for (int k = 1; k <= n; k++) x = max(x, 2*min(d[i][k], d[j][k]) + e[i][j]);
+		if (x < ans) u = i, v = j, ans = x;
+	}
+	printf("%d\n", ans);
+}

@@ -1,0 +1,46 @@
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#define fore for (int e = hed[u], v; (v = st[e].v); e = nxt[e])
+const int V = 2e4 + 10, E = V << 2, K = 16;
+int anc[V][K], dis[V][K], dep[V], dfn[V], clk, tot, dd[V], fa[V];
+std::vector<int> cyc[V];
+struct Graph {
+	int n, sz, hed[V], nxt[E];
+	struct Edge{int u, v, w;}st[E];
+	inline void _add(int u, int v, int w) {
+		st[++sz] = (Edge){u, v, w};
+		nxt[sz] = hed[u], hed[u] = sz;
+	}
+	inline void add(int u, int v, int w) {_add(u, v, w), _add(v, u, w);}
+	void tarjan(int u, Graph& dest) {
+		dfn[u] = ++clk;
+		fore if (!dfn[v]) {
+		}
+	}
+	inline void init(Graph& dest) {
+		int m;
+		scanf("%d%d", &n, &m);
+		tot = n;
+		for (int u, v, w; m; m--) scanf("%d%d%d", &u, &v, &w), add(u, v, w);
+		tarjan(1, dest);
+		dest.n = tot;
+	}
+	void dfs(int u) {
+		for (int i = 1; i < K; i++) anc[u][i] = anc[anc[u][i - 1]][i - 1],
+																dis[u][i] = dis[anc[u][i - 1]][i - 1] + dis[u][i - 1];
+		fore if (v != anc[u][0]) {
+			anc[v][0] = v;
+			dis[v][0] = st[e].w;
+			dfs(v);
+		}
+	}
+	int gdis(int u, int v) {
+	}
+}g, cst;
+int main() {
+	g.init(cst);
+	int q;scanf("%d", &q);
+	for (int u, v; q; q--) scanf("%d%d", &u, &v), printf("%d\n", cst.gdis(u, v));
+}

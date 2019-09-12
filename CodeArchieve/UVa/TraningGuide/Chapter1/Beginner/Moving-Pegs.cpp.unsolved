@@ -1,0 +1,106 @@
+#include <cstdio>
+#include <algorithm>
+#include <vector>
+#include <utility>
+#include <cstring>
+const int L = 10;
+int a[L][L], s;
+bool rm[L][L];
+typedef std::pair<int, int> pa;
+std::vector<pa> sol, now;
+inline bool ck(int i, int j) {
+	return 1 <= i && i <= 5 && 1 <= j && j <= i;	
+}
+void dfs(int d) {
+	if (sol.size() && d > sol.size()) return;
+	bool f = 0;
+	for (int i = 1; i <= 5; i++) for (int j = 1; j <= i; j++) if (ck(i + 1, j + 1) && ck(i  + 2, j + 2) && !rm[i][j] && !rm[i + 1][j + 1] && rm[i + 2][j + 2]) {
+		f = 1;
+		rm[i][j] = rm[i + 1][j + 1] = 1;
+		rm[i + 2][j + 2] = 0;
+		now.push_back(std::make_pair(a[i][j], a[i + 2][j + 2]));
+		dfs(d + 1);
+		now.pop_back();
+		rm[i][j] = rm[i + 1][j + 1] = 0;
+		rm[i + 2][j + 2] = 1;
+	}
+	else if (ck(i - 1, j - 1) && ck(i - 2, j - 2) && !rm[i][j] && !rm[i - 1][j - 1] && rm[i - 2][j - 2]) {
+		f = 1;
+		rm[i][j] = rm[i - 1][j - 1] = 1;
+		rm[i - 2][j - 2] = 0;
+		now.push_back(std::make_pair(a[i][j], a[i - 2][j - 2]));
+		dfs(d + 1);
+		now.pop_back();
+		rm[i][j] = rm[i - 1][j - 1] = 0;
+		rm[i - 2][j - 2] = 1;
+	}
+	else if (ck(i - 1, j) && ck(i - 2, j) && !rm[i][j] && !rm[i - 1][j] && rm[i - 2][j]) {
+		f = 1;
+		rm[i][j] = rm[i - 1][j] = 1;
+		rm[i - 2][j] = 0;
+		now.push_back(std::make_pair(a[i][j], a[i - 2][j]));
+		dfs(d + 1);
+		now.pop_back();
+		rm[i][j] = rm[i - 1][j] = 0;
+		rm[i - 2][j] = 1;
+	}
+	else if (ck(i + 1, j) && ck(i + 2, j) && !rm[i][j] && !rm[i + 1][j] && rm[i + 2][j]) {
+		f = 1;
+		rm[i][j] = rm[i + 1][j] = 1;
+		rm[i + 2][j] = 0;
+		now.push_back(std::make_pair(a[i][j], a[i + 2][j]));
+		dfs(d + 1);
+		now.pop_back();
+		rm[i][j] = rm[i + 1][j] = 0;
+		rm[i + 2][j] = 1;
+	}
+	else if (ck(i, j + 1) && ck(i, j + 2) && !rm[i][j] && !rm[i][j + 1] && rm[i][j + 2]) {
+		f = 1;
+		rm[i][j] = rm[i][j + 1] = 1;
+		rm[i][j + 2] = 0;
+		now.push_back(std::make_pair(a[i][j], a[i][j + 2]));
+		dfs(d + 1);
+		now.pop_back();
+		rm[i][j] = rm[i][j + 1] = 0;
+		rm[i][j + 2] = 1;
+	}
+	else if (ck(i, j - 1) && ck(i, j - 2) && !rm[i][j] && !rm[i][j - 1] && rm[i][j - 2]) {
+		f = 1;
+		rm[i][j] = rm[i][j - 1] = 1;
+		rm[i][j - 2] = 0;
+		now.push_back(std::make_pair(a[i][j], a[i][j - 2]));
+		dfs(d + 1);
+		now.pop_back();
+		rm[i][j] = rm[i][j - 1] = 0;
+		rm[i][j - 2] = 1;
+	}
+	if (!f) {
+		f = 0;
+		for (int i = 1; i <= 5; i++) for (int j = 1; j <= i; j++) if (!rm[i][j]) {
+			f = a[i][j] == s;
+			break;
+		}
+		if (f && (!sol.size() || now.size() < sol.size())) sol = now;
+		if (f) {
+			int x = 1;
+		}
+	}
+}
+int main() {
+	freopen("input", "r", stdin);
+	int T;scanf("%d", &T);
+	memset(rm, 1, sizeof(rm));
+	for (int i = 1, c = 0; i <= 5; i++) for (int j = 1; j <= i; j++) a[i][j] = ++c;
+	while (T--) {
+		scanf("%d", &s);
+		sol.clear();
+		for (int i = 1, c = 0; i <= 5; i++) for (int j = 1; j <= i; j++) rm[i][j] = ++c == s;
+		dfs(0);
+		if (!sol.size()) {
+			puts("Impossible");
+			continue;
+		}
+		for (int i = 0; i < sol.size(); i++) printf("%d %d ", sol[i].first, sol[i].second);
+		putchar('\n');
+	}
+}

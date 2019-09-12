@@ -1,0 +1,62 @@
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <cctype>
+#include <vector>
+#define ALL(x) x.begin(), x.end()
+typedef std::vector<int> EQ;
+const int N = 40, L = 1 << 16;
+struct CON{
+	char buf[L];
+	int sz, v[N];
+	EQ st[2], l, r;
+	void clear() {
+		sz=0;
+		st[0].clear();
+		st[1].clear();
+		l.clear();
+		r.clear();
+	}
+	void parse(char*& p, EQ& e) {
+		while(*p && *p != '=') {
+			if (isspace(*p)) p++;
+			else if (isdigit(*p)) {
+				int x;
+				sscanf(p, "%d%n", &v[++sz], &x);
+				p += x;
+			}
+			else e.push_back(*p++);
+		}
+	}
+	void stand() {
+		using std::sort;
+		sort(v + 1, v + 1 + sz);
+	}
+	void get() {
+		char* p = buf;
+		parse(p, l);
+		parse(++p, r);
+		stand();
+	}
+	bool invaild() {
+		return !strcmp(buf, "no solution\n");
+	}
+	bool operator==(const CON& b)const {
+		if (sz != b.sz) return 0;
+		for (int i = 1; i <= sz; i++) if (v[i] != b.v[i]) return 0;
+		return 1;
+	}
+}inc, outc;
+int main() {
+	FILE* out = fopen("output", "r");
+	FILE* in = fopen("input", "r");
+	while (fgets(inc.buf, L, in) && fgets(outc.buf, L, out)) {
+		if (outc.invaild()) {
+			puts("no");
+			continue;
+		}
+		inc.get(), outc.get();
+		printf("%d\n", inc==outc);
+		inc.clear(),outc.clear();
+	}
+}

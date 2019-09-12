@@ -1,0 +1,21 @@
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
+const int UP = 40;
+int lrand(int l, int r) {return rand()%(r - l + 1) + l;}
+int main() {
+	srand(time(NULL));
+	freopen("input", "w", stdout);
+	int T = 20;
+//	printf("%d\n",T); 
+	while (T--) {
+		int n =lrand(1, 16), m = lrand(1, n);
+		int i = 2;
+		printf("%d", lrand(1, UP));
+		for(;i <= m; i++) printf(" %c %d", rand()%2 ? '+' : '-', lrand(1, UP));
+		printf(" = ");
+		printf("%d", lrand(1, UP));
+		for(;i <= n; i++) printf(" %c %d", rand()%2 ? '+' : '-', lrand(1, UP));
+		puts("");
+	}
+}

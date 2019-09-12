@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+map<ll, int> revn;
+ll qpow(ll x, ll r, ll m) {
+	if (!x) return 0;
+	ll ret = 1;
+	while (r) {
+		if (r&1) ret = ret*x%m;
+		r>>=1, x=x*x%m;
+	}
+	return ret;
+}
+void exgcd(ll a, ll b, ll& d, ll& x, ll& y) {
+	if (!b) x = 1, y = 0, d = a;
+	else exgcd(b, a%b, d, y, x), y -= a/b*x;
+}
+ll mod(ll x, ll y) {return x > 0 ? x%y : x + (-x + y - 1)/y*y;}
+ll a, b, c, g, p;
+ll sq;
+int main() {
+	freopen("input", "r", stdin);
+	cin >> a >> b >> c >> g >> p;
+	sq = ceil(sqrt(p));
+	for (ll i = 0, gg = 1; i <= sq; i++, gg = gg*g%p)
+		revn[c*qpow(gg, p - 2, p)%p] = i;
+	ll sg = qpow(g, sq, p);
+	for (ll i = 0, gg = 1; i <= sq; i++, gg = gg*sg%p)
+		if (revn.count(gg)) {
+			ll idx = i*sq + revn[gg], x, y, d;
+			exgcd(a, p - 1, d, x, y);
+			if ((idx - b)%d) {
+				puts("no solution");
+				return 0;
+			}
+			x = mod((idx - b)/d*x, (p - 1)/d);
+			printf("%lld\n", x);
+			return 0;
+		}
+	puts("no solution");
+}
