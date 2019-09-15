@@ -16,6 +16,8 @@
 #include <map>
 #include <vector>
 #include <utility>
+#include <cassert>
+#include <string>
 #define xxx(x) cerr<<(#x)<<": "<<x<<endl;
 #define fastios ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
 typedef long long ll;
@@ -29,7 +31,7 @@ inline ll qmul(ll a, ll b, ll mod) {
   return ret;
 }
 inline ll randint(ll l, ll r) {
-  return (((ll)rand()<<15)^rand())%(r - l + 1) + l;
+  return (((ll)rand())^rand())%(r - l + 1) + l;
 }
 ll qpow(ll x, ll r, ll mod) {
   ll ret = 1;
@@ -53,7 +55,7 @@ bool witness(ll a, ll n) {
 }
 bool primetest(ll n) {
   if (n == 1) return false;
-  const static int s = 20;
+  const int s = 20;
   for (int i = 1; i <= s; i++) {
     ll a = randint(1, n - 1);
     if (witness(a, n)) return false;
@@ -63,17 +65,15 @@ bool primetest(ll n) {
 ll rho(ll n) {
   if (n == 1) return 1;
   else if (n == 0) return 0;
-  int i, k;
+  ll i, k;
   ll x, y, c;
   for (i = 2, x = randint(0, n - 1), y = x, k = 2, c = rand(); 1; i++) {
     x = (qmul(x, x, n) + c)%n;
-    //x = (x*x%n - 1 + n)%n;
    ll d = gcd(y - x, n);
     if (d > 1) {
       return d;
     }
     if (i == k) k<<=1, y = x;
-    //xxx(i);xxx(x);xxx(y);
   }
 }
 map<ll, int> mm;
@@ -95,30 +95,31 @@ vector<pair<ll, int> > fac;
 double sum;
 ll ans;
 void dfs(int idx, ll x) {
-  if (idx >= (int)fac.size()) return;
   if (b/x + x < sum) {
     sum = b/x + x;
     ans = x;
   }
-  for (int i = 0; i <= fac[idx].second; i++, x *= fac[idx].first) {
-    dfs(idx+1, x);
-  }
+  if (idx >= (int)fac.size()) return;
+  dfs(idx+1, x);
+  for (ll i = 1; i <= fac[idx].second; i++, x *= fac[idx].first);
+  dfs(idx+1, x);
 }
 void solve() {
   mm.clear();
   fac.clear();
   sum = 1e20;
   b /= a;
+  ans=1;
   resolve(b);
-  //xxx(b);
   for (map<ll, int>::iterator x = mm.begin(); x != mm.end(); x++) {
     fac.push_back(*x);
   }
   dfs(0, 1);
-  cout << b/ans*a << " " << ans*a << endl;
+  if (b/ans > ans) ans = b/ans;
+  cout << (b/ans*a) << " " << (ans*a) << " "<<endl;
 }
 int main() {
-  srand(time(NULL));
+  //srand(time(NULL));
   fastios;
   while (cin >> a >> b) {
     solve();
