@@ -3,7 +3,9 @@ while [[ $? -eq 0 ]]
 do
   echo pass
   python gen.py > input
-  ./a.out<input>output
-  ./std<input>answer
+  echo my
+  time ./a.out<input>output
+  echo brute
+  time ./brute<input>answer
   diff output answer -w
 done
