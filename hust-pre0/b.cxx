@@ -48,7 +48,7 @@ inline bool check(int x) {
   return 1;
 }
 bool solve() {
-  int l = 0, r = 2000;
+  int l = 0, r = 5000;
   while (l < r) {
     int mid = (l + r) >> 1;
     if (check(mid)) {
