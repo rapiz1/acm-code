@@ -1,13 +1,14 @@
 #!/bin/bash
 
-find . -name output|xargs rm
-find . -name input|xargs rm
-find . -name "*.out"|xargs rm
-find . -name "*.in"|xargs rm
-find . -name "*.ans"|xargs rm
-find . -name gen|xargs rm
-find . -name std|xargs rm
-find . -name brute|xargs rm
-find . -name "gen.cpp"|xargs rm
-find . -name "brute.cpp"|xargs rm
-find . -name "std.cpp"|xargs rm
+find . -name output -delete
+find . -name input -delete
+find . -name "*.out" -delete
+find . -name "*.in" -delete
+find . -name "*.ans" -delete
+find . -name gen -delete
+find . -name std -delete
+find . -name brute -delete
+find . -name "gen.cpp" -delete
+find . -name "brute.cpp" -delete
+find . -name "std.cpp" -delete
+#find -type f -atime +1 -exec sh -c 'file "{}" | grep ELF > /dev/null' \; -delete
