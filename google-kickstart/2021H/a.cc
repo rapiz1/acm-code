@@ -6,12 +6,17 @@ int dis(int a, int b) {
   a -= 'a';
   b -= 'a';
   const int mod = 'z' - 'a' + 1;
-  return (a - b + mod) % mod;
+  int d = abs(a - b);
+  return min(d, mod - d);
 }
 ll solve() {
   ll ans = 0;
   cin >> s >> f;
-
+  for (auto c : s) {
+    int md = 26;
+    for (auto t : f) md = min(md, dis(t, c));
+    ans += md;
+  }
   return ans;
 }
 int main() {
